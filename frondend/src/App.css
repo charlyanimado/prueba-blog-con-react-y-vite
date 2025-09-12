@@ -1,0 +1,290 @@
+/* Importa la fuente "Poppins" desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+/* --- 1. Variables de Diseño Mejoradas --- */
+:root {
+  /* Paleta de Colores */
+  --background-color: #f8f9fa;       /* Un gris aún más claro y limpio */
+  --text-color: #212529;             /* Negro suave estándar */
+  --text-color-secondary: #6c757d;   /* Gris secundario para texto tenue */
+  --primary-color: #007bff;           /* Azul principal para acciones */
+  --secondary-color: #6c757d;         /* Gris secundario para texto tenue */
+  --card-background: #ffffff;          /* Blanco puro */
+  --card-border: #e9ecef;             /* Borde muy sutil */
+  --header-footer-bg: #2c3e50;         /* Azul oscuro elegante */
+  --header-footer-text: #ffffff;       /* Texto blanco */
+  
+  /* Tipografía */
+  --font-family: 'Poppins', sans-serif; /* Fuente más moderna y limpia */
+
+  /* Estilos UI */
+  --border-radius: 10px;               /* Bordes un poco más redondeados */
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); /* Sombra más suave y difusa */
+  --transition-speed: 0.3s;            /* Velocidad de transición unificada */
+}
+
+/* --- 2. Estilos Base del Body --- */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  line-height: 1.6; /* Mejora la legibilidad */
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* --- 3. Tarjetas de Contenido Refinadas --- */
+.content-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius);
+  padding: 30px; /* Un poco más de relleno */
+  margin-bottom: 2rem;
+  box-shadow: var(--box-shadow);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.content-card:hover {
+  transform: translateY(-5px); /* Efecto de "levantamiento" */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 4. Navbar Mejorado --- */
+.main-navbar {
+  background-color: var(--header-footer-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1rem 0; /* Mayor espaciado vertical */
+}
+
+.main-navbar .navbar-brand,
+.main-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.8) !important; /* Texto un poco más tenue */
+  font-weight: 500;
+  transition: color var(--transition-speed) ease;
+}
+
+.main-navbar .nav-link:hover,
+.main-navbar .navbar-brand:hover {
+  color: var(--header-footer-text) !important; /* Se vuelve blanco puro al pasar el mouse */
+}
+
+/* Navbar Improvements */
+.navbar-brand {
+    transition: transform 0.2s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.nav-link {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link:hover {
+    transform: translateY(-2px);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 2px;
+    background-color: #fff;
+}
+
+/* --- 5. Footer Mejorado --- */
+.main-footer {
+  background-color: var(--header-footer-bg);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2rem 0;
+  text-align: center;
+  text-decoration: var(--text-color-secondary);
+  font-size: 0.9rem;
+  margin-top: 3rem;
+}
+
+.main-footer .social-icons a {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0.75rem;
+  font-size: 1.3rem;
+  transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.main-footer .social-icons a:hover {
+  color: var(--primary-color);
+  transform: scale(1.1); /* Efecto de crecimiento */
+}
+
+/* Footer Improvements */
+.hover-link {
+    transition: all 0.3s ease;
+    color: #adb5bd !important; /* Better contrast for footer links */
+}
+
+.hover-link:hover {
+    color: #0d6efd !important;
+    transform: translateX(5px);
+}
+
+.social-links a {
+    transition: all 0.3s ease;
+    color: #ffffff !important; /* Ensure social links are white */
+}
+
+.social-links a:hover {
+    color: #0d6efd !important;
+    transform: translateY(-3px);
+}
+
+/* Footer specific text color fixes */
+footer.bg-dark {
+    background-color: #212529 !important;
+}
+
+footer.bg-dark .text-muted {
+    color: #adb5bd !important; /* Override Bootstrap's text-muted for better contrast on dark footer */
+}
+
+footer.bg-dark h5,
+footer.bg-dark h6 {
+    color: #ffffff !important; /* Ensure headers are white */
+}
+
+footer.bg-dark p {
+    color: #adb5bd !important; /* Better contrast for paragraph text */
+}
+
+footer.bg-dark .text-light {
+    color: #ffffff !important; /* Ensure text-light stays white */
+}
+
+/* Footer text classes for better readability */
+.footer-text {
+    color: #adb5bd !important; /* Light gray for good contrast on dark background */
+    line-height: 1.4; /* Reduce line height for more compact text */
+}
+
+.footer-link {
+    color: #adb5bd !important; /* Light gray for footer links */
+}
+
+/* Footer height optimization */
+footer.bg-dark {
+    background-color: #212529 !important;
+}
+
+footer .social-links {
+    margin-top: 0.5rem; /* Reduce top margin for social links */
+}
+
+/* Compact footer styling */
+footer h5, footer h6 {
+    margin-bottom: 0.5rem !important; /* Reduce header margins */
+}
+
+footer p {
+    margin-bottom: 0.5rem !important; /* Reduce paragraph margins */
+}
+
+/* App Layout */
+.app-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Container improvements to better utilize space */
+.container {
+    max-width: 1200px; /* Limit maximum width for better readability */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Better space utilization for main content */
+main .container {
+    width: 100%;
+    max-width: 1140px; /* Slightly wider for better space usage */
+}
+
+/* Reduce excessive padding on smaller screens */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    main .container {
+        max-width: 100%;
+    }
+}
+
+/* Ensure footer utilizes full width properly */
+footer .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Navbar full width styling */
+.navbar .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Content optimization */
+.content-card {
+    margin-bottom: 1.5rem; /* Reduce excessive margin */
+}
+
+/* Better responsive behavior */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px; /* Use more screen space on large screens */
+    }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .navbar-nav .nav-item {
+        text-align: center;
+        margin: 0.5rem 0;
+    }
+    
+    .social-links {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    /* Reduce padding on mobile for full-width elements */
+    footer .container-fluid,
+    .navbar .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Large screen adjustments for full-width elements */
+@media (min-width: 1200px) {
+    footer .container-fluid,
+    .navbar .container-fluid {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
