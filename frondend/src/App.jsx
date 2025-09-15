@@ -35,7 +35,7 @@ function App() {
     setUser(null);
     localStorage.removeItem('user');
   };
-  console.log('Usuario actual en App.jsx:', user);
+
   return (
     <Router>
         <div className='app-container'>

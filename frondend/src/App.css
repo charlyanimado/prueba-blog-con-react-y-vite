@@ -106,6 +106,57 @@ main {
     background-color: #fff;
 }
 
+/* Desktop-specific navbar enhancements */
+@media (min-width: 992px) {
+    .navbar-nav .nav-link {
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem !important;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    .navbar-nav .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.15);
+        font-weight: 600;
+    }
+    
+    /* Enhanced dropdown for desktop */
+    .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        animation: dropdownFadeIn 0.2s ease;
+    }
+    
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .dropdown-item {
+        transition: all 0.2s ease;
+        border-radius: 4px;
+        margin: 2px 4px;
+    }
+    
+    .dropdown-item:hover {
+        background-color: var(--primary-color);
+        transform: translateX(5px);
+    }
+}
+
 /* --- 5. Footer Mejorado --- */
 .main-footer {
   background-color: var(--header-footer-bg);
@@ -213,7 +264,7 @@ main {
 
 /* Container improvements to better utilize space */
 .container {
-    max-width: 1200px; /* Limit maximum width for better readability */
+    max-width: 1400px; /* Increased width for better desktop space usage */
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -221,7 +272,32 @@ main {
 /* Better space utilization for main content */
 main .container {
     width: 100%;
-    max-width: 1140px; /* Slightly wider for better space usage */
+    max-width: 1320px; /* Wider for better desktop space usage */
+}
+
+/* Desktop-specific layout optimizations */
+@media (min-width: 992px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    
+    main .container {
+        max-width: 1320px; /* Utilize more screen space on desktop */
+    }
+}
+
+/* Extra large screens optimization */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1400px;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+    
+    main .container {
+        max-width: 1400px;
+    }
 }
 
 /* Reduce excessive padding on smaller screens */
@@ -253,10 +329,63 @@ footer .container-fluid {
     margin-bottom: 1.5rem; /* Reduce excessive margin */
 }
 
+/* Desktop content layout improvements */
+@media (min-width: 992px) {
+    .sticky-sidebar {
+        position: sticky;
+        top: 100px; /* Account for navbar height */
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+    }
+    
+    .tech-tags .badge {
+        font-size: 0.75rem;
+    }
+    
+    /* Card grid improvements */
+    .content-card.h-100 {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .content-card.h-100 p:last-of-type {
+        flex-grow: 1;
+    }
+    
+    .content-card.h-100 .btn {
+        margin-top: auto;
+        align-self: flex-start;
+    }
+}
+
+/* Enhanced content card hover effects for desktop */
+@media (min-width: 992px) {
+    .content-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    }
+    
+    .sticky-sidebar .content-card:hover {
+        transform: none; /* Disable transform for sidebar to prevent layout shift */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+}
+
 /* Better responsive behavior */
 @media (min-width: 1200px) {
     .container {
-        max-width: 1140px; /* Use more screen space on large screens */
+        max-width: 1320px; /* Use more screen space on large screens */
+    }
+}
+
+/* Ultra-wide desktop optimization */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1500px; /* Better utilization on very large screens */
+    }
+    
+    .content-card {
+        padding: 40px; /* More generous padding on ultra-wide screens */
     }
 }
 
@@ -286,5 +415,309 @@ footer .container-fluid {
     .navbar .container-fluid {
         padding-left: 30px;
         padding-right: 30px;
+    }
+}
+
+/* Desktop performance optimizations */
+@media (min-width: 992px) {
+    /* Optimize animations for desktop */
+    .content-card {
+        will-change: transform, box-shadow;
+    }
+    
+    /* Smooth scrolling for desktop */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Desktop-specific focus styles */
+    .nav-link:focus,
+    .btn:focus {
+        outline: 2px solid rgba(13, 110, 253, 0.5);
+        outline-offset: 2px;
+    }
+    
+    /* Desktop typography improvements */
+    .content-card h5 {
+        font-size: 1.3rem;
+        line-height: 1.4;
+    }
+    
+    .content-card p {
+        line-height: 1.6;
+    }
+    
+    /* Desktop-specific spacing */
+    .container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    /* Optimized grid gutters for desktop */
+    .row {
+        --bs-gutter-x: 2rem;
+    }
+    
+    /* Enhanced form styling for desktop */
+    .form-control:focus,
+    .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+    
+    /* Progress bar enhancements */
+    .progress {
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-bar {
+        border-radius: 10px;
+        transition: width 0.6s ease;
+    }
+    
+    /* Badge improvements */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.4em 0.8em;
+        border-radius: 6px;
+        transition: transform 0.2s ease;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Contact page specific improvements */
+    /* Alert styling */
+    .alert {
+        border: none;
+        border-radius: 8px;
+        border-left: 4px solid;
+    }
+    
+    .alert-info {
+        border-left-color: var(--primary-color);
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+    
+    /* Authentication pages styling */
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    
+    /* Table improvements */
+    .table-hover tbody tr:hover {
+        background-color: rgba(13, 110, 253, 0.05);
+        transform: translateX(2px);
+        transition: all 0.2s ease;
+    }
+    
+    .table-dark th {
+        border: none;
+        background-color: var(--header-footer-bg);
+        color: white;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Avatar and user interface improvements */
+    .avatar-placeholder,
+    .avatar-large {
+        display: inline-block;
+    }
+    
+    /* Breadcrumb styling */
+    .breadcrumb {
+        background: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: var(--text-color-secondary);
+    }
+    
+    /* Newsletter section improvements */
+    .newsletter-form .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .newsletter-form .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .newsletter-form .is-valid {
+        border-color: #28a745;
+    }
+    
+    .newsletter-form .is-invalid {
+        border-color: #dc3545;
+    }
+    
+    /* Contact form styles */
+    .contact-form {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-form::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+        background-size: 200% 100%;
+        animation: gradientShift 3s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    .contact-form .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .contact-form .form-control,
+    .contact-form .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+    
+    .contact-form .form-control:focus,
+    .contact-form .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: white;
+        outline: none;
+    }
+    
+    .contact-form .form-control.is-invalid {
+        border-color: #dc3545;
+        background: #fff5f5;
+    }
+    
+    .contact-form .form-control.is-invalid:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+    }
+    
+    .contact-form .invalid-feedback {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    
+    .contact-form .form-text {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+        text-align: right;
+        font-family: monospace;
+    }
+    
+    .contact-form .form-check-input {
+        border-radius: 4px;
+        border: 2px solid #dee2e6;
+        margin-top: 0.25rem;
+    }
+    
+    .contact-form .form-check-input:checked {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+    
+    .contact-form .form-check-input:focus {
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+    
+    .contact-form .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-form .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .contact-form .btn-primary:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .contact-form .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        border-radius: 10px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .contact-form .btn-outline-secondary:hover:not(:disabled) {
+        background: #6c757d;
+        transform: translateY(-1px);
+    }
+    
+    .contact-form .alert {
+        border: none;
+        border-radius: 10px;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-form .alert-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+    }
+    
+    .contact-form .alert-danger {
+        background: linear-gradient(135deg, #dc3545, #fd7e14);
+        color: white;
+    }
+    
+    .contact-form .alert .btn-close {
+        filter: brightness(0) invert(1);
+    }
+    
+    /* Loading animation for submit button */
+    .contact-form .fa-spinner {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
 }

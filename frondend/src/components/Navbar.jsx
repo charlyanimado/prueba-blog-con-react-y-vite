@@ -1,9 +1,50 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Navbar({ user, handleLogout }) {
     const [isCollapsed, setIsCollapsed] = useState(true);
     const navigate = useNavigate();
+
+    // Desktop keyboard shortcuts
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            // Only handle shortcuts on desktop (not mobile)
+            if (window.innerWidth < 992) return;
+            
+            // Alt + key combinations for navigation
+            if (event.altKey) {
+                switch (event.key) {
+                    case 'h':
+                        event.preventDefault();
+                        navigate('/');
+                        break;
+                    case 'g':
+                        event.preventDefault();
+                        navigate('/gustos');
+                        break;
+                    case 'a':
+                        event.preventDefault();
+                        navigate('/aprender');
+                        break;
+                    case 'c':
+                        event.preventDefault();
+                        navigate('/contacto');
+                        break;
+                    case 'l':
+                        event.preventDefault();
+                        if (!user) navigate('/login');
+                        break;
+                    case 'p':
+                        event.preventDefault();
+                        if (user) navigate('/perfil');
+                        break;
+                }
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [navigate, user]);
 
     const handleLogoutClick = () => {
         handleLogout();
@@ -43,6 +84,7 @@ function Navbar({ user, handleLogout }) {
                                 className={({isActive}) => `nav-link ${isActive ? 'active fw-bold' : ''}`} 
                                 to="/"
                                 onClick={closeNavbar}
+                                title="Ir al Blog (Alt+H)"
                             >
                                 <i className="fas fa-home me-1"></i>
                                 Blog
@@ -53,6 +95,7 @@ function Navbar({ user, handleLogout }) {
                                 className={({isActive}) => `nav-link ${isActive ? 'active fw-bold' : ''}`} 
                                 to="/gustos"
                                 onClick={closeNavbar}
+                                title="Me gusta (Alt+G)"
                             >
                                 <i className="fas fa-heart me-1"></i>
                                 Me gusta
@@ -63,6 +106,7 @@ function Navbar({ user, handleLogout }) {
                                 className={({isActive}) => `nav-link ${isActive ? 'active fw-bold' : ''}`} 
                                 to="/aprender"
                                 onClick={closeNavbar}
+                                title="Aprender en 2025 (Alt+A)"
                             >
                                 <i className="fas fa-graduation-cap me-1"></i>
                                 Aprender en 2025
@@ -73,6 +117,7 @@ function Navbar({ user, handleLogout }) {
                                 className={({isActive}) => `nav-link ${isActive ? 'active fw-bold' : ''}`} 
                                 to="/contacto"
                                 onClick={closeNavbar}
+                                title="Contáctame (Alt+C)"
                             >
                                 <i className="fas fa-envelope me-1"></i>
                                 Contáctame
@@ -135,6 +180,7 @@ function Navbar({ user, handleLogout }) {
                                     className="btn btn-outline-light me-2" 
                                     to="/login"
                                     onClick={closeNavbar}
+                                    title="Iniciar Sesión (Alt+L)"
                                 >
                                     <i className="fas fa-sign-in-alt me-1"></i>
                                     Iniciar Sesión
