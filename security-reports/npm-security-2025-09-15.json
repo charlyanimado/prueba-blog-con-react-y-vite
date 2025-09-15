@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-09-15T05:35:04.564Z",
+  "vulnerabilities": [
+    {
+      "directory": "",
+      "vulnerabilities": {},
+      "advisoriesCount": 0
+    },
+    {
+      "directory": "frondend",
+      "vulnerabilities": {},
+      "advisoriesCount": 0
+    },
+    {
+      "directory": "backend",
+      "vulnerabilities": {},
+      "advisoriesCount": 0
+    }
+  ],
+  "suspiciousChanges": [],
+  "integrityChecks": [
+    {
+      "path": "package.json",
+      "issues": [],
+      "dependenciesCount": 4
+    },
+    {
+      "path": "frondend\\package.json",
+      "issues": [],
+      "dependenciesCount": 5
+    },
+    {
+      "path": "backend\\package.json",
+      "issues": [],
+      "dependenciesCount": 4
+    }
+  ],
+  "recommendations": [],
+  "npmrcIssues": []
+}

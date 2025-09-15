@@ -96,7 +96,46 @@ Web4/
 └── 📄 README.md              # Este archivo
 ```
 
-## 🛠️ Instalación y Configuración
+## � Seguridad
+
+Este proyecto implementa medidas robustas de seguridad para protegerse contra ataques de supply chain de NPM:
+
+### Medidas de Protección Implementadas
+
+- **🔐 Versiones Exactas**: Todas las dependencias usan versiones exactas (sin ^ o ~) para prevenir instalación automática de versiones maliciosas
+- **🛡️ Configuración NPM Segura**: Archivos `.npmrc` configurados con:
+  - `save-exact=true`: Fuerza instalación de versiones exactas
+  - `audit-level=moderate`: Rechaza instalaciones con vulnerabilidades moderadas o altas
+  - Verificación SSL obligatoria para el registro de NPM
+- **🔍 Auditorías Automatizadas**: Scripts de verificación automática que detectan:
+  - Vulnerabilidades conocidas en dependencias
+  - Cambios no autorizados en versiones
+  - Problemas de integridad en package-lock.json
+- **📊 Monitoreo Continuo**: Sistema de reportes de seguridad diarios
+- **🔒 Protección de Credenciales**: Templates `.env.example` y patrones `.gitignore` para prevenir exposición de tokens
+
+### Scripts de Seguridad Disponibles
+
+```bash
+# Auditoría completa del proyecto
+npm run security:audit
+
+# Verificación automatizada de integridad
+npm run security:check
+
+# Verificación diaria completa
+npm run security:daily
+```
+
+### Documentación de Seguridad
+
+- 📋 `SECURITY-NPM.md`: Guía completa de seguridad NPM
+- 📊 `package-integrity.json`: Registro de integridad de dependencias
+- 📁 `security-reports/`: Reportes automáticos de verificación
+
+⚠️ **Importante**: Ejecuta `npm run security:daily` semanalmente para mantener la seguridad del proyecto.
+
+## �🛠️ Instalación y Configuración
 
 ### Prerrequisitos
 - **Node.js** (versión 18 o superior)

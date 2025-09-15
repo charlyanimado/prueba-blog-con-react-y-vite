@@ -1,0 +1,100 @@
+{
+  "version": "1.0.0",
+  "lastVerified": "2024-12-20",
+  "verificationFrequency": "weekly",
+  "description": "Archivo de verificación de integridad para dependencias críticas del proyecto",
+  "dependencies": {
+    "frontend": {
+      "react": {
+        "version": "19.1.1",
+        "importance": "critical",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Framework principal - monitear vulnerabilidades XSS"
+      },
+      "vite": {
+        "version": "7.1.5",
+        "importance": "critical", 
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Build tool - actualizado para corregir vulnerabilidades GHSA-g4jq-h2w9-997c y GHSA-jqfw-vq24-v9c3"
+      },
+      "@vitejs/plugin-react": {
+        "version": "4.3.4",
+        "importance": "high",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Plugin de React para Vite"
+      },
+      "eslint": {
+        "version": "9.16.0",
+        "importance": "medium",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Herramienta de análisis de código"
+      }
+    },
+    "backend": {
+      "express": {
+        "version": "5.1.0",
+        "importance": "critical",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Framework del servidor - monitear vulnerabilidades de inyección"
+      },
+      "cors": {
+        "version": "2.8.5",
+        "importance": "high",
+        "lastAudit": "2024-12-20", 
+        "securityNotes": "Configuración CORS - crítico para seguridad de API"
+      },
+      "dotenv": {
+        "version": "16.4.7",
+        "importance": "high",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Gestión de variables de entorno - proteger credenciales"
+      },
+      "helmet": {
+        "version": "9.0.2",
+        "importance": "high",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Headers de seguridad HTTP"
+      },
+      "mysql2": {
+        "version": "3.12.0",
+        "importance": "critical",
+        "lastAudit": "2024-12-20",
+        "securityNotes": "Driver de base de datos - monitear vulnerabilidades de inyección SQL"
+      }
+    }
+  },
+  "auditHistory": [
+    {
+      "date": "2024-12-20",
+      "vulnerabilitiesFound": 1,
+      "vulnerabilitiesFixed": 1,
+      "details": [
+        {
+          "package": "vite",
+          "version": "7.1.2 -> 7.1.5",
+          "severity": "low",
+          "description": "Vite middleware vulnerabilities GHSA-g4jq-h2w9-997c y GHSA-jqfw-vq24-v9c3"
+        }
+      ]
+    }
+  ],
+  "securityChecklist": {
+    "weeklyTasks": [
+      "npm audit en todos los directorios",
+      "Verificar actualizaciones de seguridad",
+      "Revisar dependencias obsoletas",
+      "Comprobar integridad de package-lock.json"
+    ],
+    "monthlyTasks": [
+      "Actualizar este archivo de integridad",
+      "Revisar logs de seguridad",
+      "Verificar configuración .npmrc",
+      "Auditar permisos de repositorio"
+    ]
+  },
+  "emergencyContacts": {
+    "securityTeam": "security@empresa.com",
+    "npmSupport": "https://docs.npmjs.com/reporting-malware-in-npm",
+    "githubSecurity": "https://github.com/advisories"
+  }
+}
