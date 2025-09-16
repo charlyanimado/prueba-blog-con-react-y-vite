@@ -3,33 +3,6 @@ const express = require('express');
 const mysql = require('mysql2'); 
 const cors = require('cors');
 
-/*
-Para que funcione el newsletter, necesitas crear esta tabla en tu base de datos:
-
-CREATE TABLE newsletter_subscriptions (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  fecha_suscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  activo BOOLEAN DEFAULT TRUE,
-  INDEX idx_email (email),
-  INDEX idx_activo (activo)
-);
-
-Para que funcione el formulario de contacto, necesitas crear esta tabla:
-
-CREATE TABLE contact_messages (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  asunto VARCHAR(255),
-  mensaje TEXT NOT NULL,
-  fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  leido BOOLEAN DEFAULT FALSE,
-  INDEX idx_fecha (fecha_envio),
-  INDEX idx_leido (leido)
-);
-*/
-
 // 2. Crear la aplicación Express
 const app = express();
 const PORT = 3001;
