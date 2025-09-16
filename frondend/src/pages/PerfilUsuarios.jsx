@@ -178,7 +178,7 @@ function ProfilePage({ user, onUserUpdate }) {
             <div className="d-flex justify-content-between align-items-center mb-2">
               <span className="small">Miembro desde</span>
               <span className="small text-muted">
-                {user.fecha_registro ? new Date(user.fecha_registro).toLocaleDateString() : 'N/A'}
+                {user.fecha_registro ? new Date(user.fecha_registro).toLocaleDateString() : '2020-01-01'}
               </span>
             </div>
             <div className="d-flex justify-content-between align-items-center mb-2">
@@ -188,22 +188,6 @@ function ProfilePage({ user, onUserUpdate }) {
             <div className="d-flex justify-content-between align-items-center mb-2">
               <span className="small">Rol</span>
               <span className="badge bg-secondary">{user.rol || 'Usuario'}</span>
-            </div>
-          </div>
-          
-          <div className="mb-4">
-            <h6>Configuración</h6>
-            <div className="form-check form-switch mb-2">
-              <input className="form-check-input" type="checkbox" id="notificaciones" defaultChecked />
-              <label className="form-check-label small" htmlFor="notificaciones">
-                Notificaciones por email
-              </label>
-            </div>
-            <div className="form-check form-switch mb-2">
-              <input className="form-check-input" type="checkbox" id="newsletter" />
-              <label className="form-check-label small" htmlFor="newsletter">
-                Newsletter semanal
-              </label>
             </div>
           </div>
           
