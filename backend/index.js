@@ -2,6 +2,7 @@
 const express = require('express'); 
 const mysql = require('mysql2'); 
 const cors = require('cors');
+require('dotenv').config(); // Cargar variables de entorno
 
 console.log('✅ 1. Script iniciado y dependencias cargadas.');
 
@@ -16,7 +17,120 @@ app.use(express.json());
 
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
-let db;
+// 4. Configuración de la base de datos
+const db = mysql.createConnection({
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'blog_database'
+});
+const connectionString = process.env.DATABASE_URL;
+
+// Asignamos la conexión a la variable db que declaramos arriba
+db = mysql.createConnection({
+  uri: connectionString, // Ahora esta variable sí existe
+  ssl: {
+    // Esto es requerido para conectar a Railway
+    rejectUnauthorized: false
+  }
+});
+
+console.log('✅ 3. Configuración de base de datos establecida.');
+
+
+// Función para crear las tablas necesarias
+const createTables = () => {
+  // Crear tabla de roles
+  const createRolesTable = `
+    CREATE TABLE IF NOT EXISTS roles (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(50) NOT NULL UNIQUE
+    )
+  `;
+
+  // Crear tabla de usuarios
+  const createUsersTable = `
+    CREATE TABLE IF NOT EXISTS usuarios (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(100) NOT NULL,
+      email VARCHAR(100) NOT NULL UNIQUE,
+      password VARCHAR(255) NOT NULL,
+      rol_id INT DEFAULT 2,
+      fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (rol_id) REFERENCES roles(id)
+    )
+  `;
+
+  // Crear tabla de newsletter
+  const createNewsletterTable = `
+    CREATE TABLE IF NOT EXISTS newsletter_subscriptions (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      email VARCHAR(255) UNIQUE NOT NULL,
+      fecha_suscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      activo BOOLEAN DEFAULT TRUE
+    )
+  `;
+
+  // Crear tabla de mensajes de contacto
+  const createContactTable = `
+    CREATE TABLE IF NOT EXISTS contact_messages (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      nombre VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      asunto VARCHAR(255),
+      mensaje TEXT NOT NULL,
+      fecha_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      leido BOOLEAN DEFAULT FALSE,
+      INDEX idx_fecha (fecha_envio),
+      INDEX idx_leido (leido)
+    )
+  `;
+
+  // Insertar roles por defecto
+  const insertDefaultRoles = `
+    INSERT IGNORE INTO roles (id, nombre) VALUES 
+    (1, 'admin'),
+    (2, 'usuario')
+  `;
+
+  // Ejecutar todas las queries
+  db.query(createRolesTable, (err) => {
+    if (err) console.error('Error creando tabla roles:', err);
+    else console.log('✅ Tabla roles verificada/creada');
+
+    db.query(insertDefaultRoles, (err) => {
+      if (err) console.error('Error insertando roles:', err);
+      else console.log('✅ Roles por defecto insertados');
+    });
+  });
+
+  db.query(createUsersTable, (err) => {
+    if (err) console.error('Error creando tabla usuarios:', err);
+    else console.log('✅ Tabla usuarios verificada/creada');
+  });
+
+  db.query(createNewsletterTable, (err) => {
+    if (err) console.error('Error creando tabla newsletter:', err);
+    else console.log('✅ Tabla newsletter verificada/creada');
+  });
+
+  db.query(createContactTable, (err) => {
+    if (err) console.error('Error creando tabla contacto:', err);
+    else console.log('✅ Tabla contacto verificada/creada');
+  });
+};
+
+//para probar si mi base de datos se cayo o no 
+db.connect(error => {
+  if (error) {
+    console.error('❌ ERROR AL CONECTAR A LA BASE DE DATOS:', error);
+    return;
+  }
+  console.log('✅ 4. Conexión a la base de datos exitosa.');
+  
+  // Crear tablas después de conectar
+  createTables();
+});
 
 
 
@@ -364,27 +478,12 @@ app.get('/contact/stats', (req, res) => {
   });
 });
 
-// Asignamos la conexión a la variable db que declaramos arriba
-db = mysql.createConnection({
-  uri: connectionString,
-  // ...
-});
-
-// Intentamos conectar a la base de datos
-db.connect((error) => {
-  if (error) {
-    // Si la conexión falla, la aplicación se detendrá y mostrará un error claro.
-    console.error('❌ ERROR FATAL AL CONECTAR A LA BASE DE DATOS:', error);
-    process.exit(1); // Detiene la aplicación si no se puede conectar
-  }
-
-  console.log('✅ 4. Conexión a la base de datos exitosa.');
-
-  // --- INICIAR EL SERVIDOR ---
-  // SOLO SI LA CONEXIÓN ES EXITOSA, PROCEDEMOS A INICIAR EL SERVIDOR.
-  app.listen(PORT, () => {
-    console.log(`🚀 5. Servidor iniciado y escuchando en el puerto ${PORT}`);
-  });
+// --- INICIAR EL SERVIDOR ---
+// El servidor se inicia cuando la conexión a la base de datos es exitosa
+app.listen(PORT, () => {
+  console.log(`🚀 5. Servidor iniciado y escuchando en el puerto ${PORT}`);
+  console.log(`📱 Frontend disponible en: http://localhost:5173`);
+  console.log(`� API disponible en: http://localhost:${PORT}`);
 });
 
 // --- MANEJO DE ERRORES NO CAPTURADOS ---
