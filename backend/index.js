@@ -422,10 +422,11 @@ app.get('/contact/stats', (req, res) => {
 });
 
 // --- INICIAR EL SERVIDOR ---
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ 4. Servidor corriendo en puerto ${PORT}`);
-  console.log(`🌐 Servidor accesible en: http://localhost:${PORT}`);
+  console.log(`🌐 Servidor accesible en: http://0.0.0.0:${PORT}`);
   console.log('🚀 ¡Aplicación lista para recibir peticiones!');
+  console.log(`📡 Entorno: ${process.env.NODE_ENV || 'development'}`);
 });
 
 // --- MANEJO DE ERRORES NO CAPTURADOS ---
