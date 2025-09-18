@@ -2,7 +2,7 @@
 
 // 1. Importaciones
 const express = require('express'); 
-const mysql = require('mysql2'); 
+const { Client } = require('pg');
 const cors = require('cors');
 
 console.log('✅ 1. Script iniciado y dependencias cargadas.');
@@ -101,11 +101,13 @@ app.post('/newsletter/subscribe', (req, res) => {
 console.log('⏳ 3. Configurando conexión a la base de datos...');
 const connectionString = process.env.DATABASE_URL;
 
-db = mysql.createConnection({
-  uri: connectionString,
-  ssl: {
-    rejectUnauthorized: false
-  }
+const { Client } = require('pg'); // Cambiamos la importación
+// ...
+db = new Client({ // Cambiamos a "new Client"
+    connectionString: connectionString,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 db.connect((error) => {
