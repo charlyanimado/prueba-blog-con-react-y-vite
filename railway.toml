@@ -1,0 +1,12 @@
+# Railway.toml - Configuración para Railway
+[build]
+  builder = "NIXPACKS"
+
+[deploy]
+  startCommand = "cd backend && npm start"
+  healthcheckPath = "/"
+  healthcheckTimeout = 300
+  restartPolicyType = "ON_FAILURE"
+
+[environments.production]
+  variables = { NODE_ENV = "production" }
