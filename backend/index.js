@@ -15,7 +15,12 @@ app.use(express.json());
 // 4. Configuración de la conexión a MySQL
 // en un entorno de producción, no deberias de exponer tus credenciales
 const connectionString = process.env.DATABASE_URL;
-const db = mysql.createConnection(connectionString);
+const db = mysql.createConnection({
+  uri: 'mysql://root:XrSBpmJFLHBNnacIKDAYizHjajaLIPvI@trolley.proxy.rlwy.net:45664/charly_srl',
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 //para probar si mi base de datos se cayo o no 
 db.connect(error => {
   if (error) {
