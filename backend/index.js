@@ -26,6 +26,10 @@ let db;
 // Las rutas deben definirse aquí, antes de que el servidor se inicie.
 
 // Ruta de prueba
+app.get('/', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.get('/api/test', (req, res) => {
   res.json({ message: '🚀 API funcionando' });
 });
