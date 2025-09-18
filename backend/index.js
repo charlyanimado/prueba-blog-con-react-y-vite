@@ -16,39 +16,74 @@ app.use(express.json());
 
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
-// Configuración de la base de datos
+// =================================================================
+// 4. CONFIGURACIÓN Y CONEXIÓN A LA BASE DE DATOS
+// =================================================================
+const connectionString = process.env.DATABASE_URL;
 let db = null;
 let dbConnected = false;
 
-try {
-  db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'blog_database'
-  });
-  console.log('✅ 3. Configuración de base de datos establecida.');
-} catch (error) {
-  console.error('❌ Error configurando base de datos:', error);
-  db = null;
+if (connectionString) {
+  // --- Configuración para Producción (Railway/Vercel/Heroku) ---
+  console.log('✅ 3. Usando DATABASE_URL para conexión de producción...');
+  try {
+    db = mysql.createConnection({
+      uri: connectionString, // Usamos la URL completa que nos da la plataforma
+      ssl: {
+        // Requerido para conexiones seguras en la nube
+        rejectUnauthorized: false
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error configurando base de datos de producción:', error);
+    db = null;
+  }
+} else {
+  // --- Configuración para Desarrollo Local ---
+  console.log('⚠️ 3. Usando configuración local para desarrollo...');
+  try {
+    db = mysql.createConnection({
+      host: process.env.DB_HOST || 'localhost',
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || '',
+      database: process.env.DB_NAME || 'charly_srl'
+    });
+  } catch (error) {
+    console.error('❌ Error configurando base de datos local:', error);
+    db = null;
+  }
 }
 
-// Conectar a la base de datos
+// Conectar a la base de datos y luego iniciar el servidor
 if (db) {
-  db.connect(error => {
+  db.connect((error) => {
     if (error) {
       console.error('❌ ERROR AL CONECTAR A LA BASE DE DATOS:', error.message);
+      
+      // En producción, detener la aplicación si no hay BD
+      if (process.env.NODE_ENV === 'production') {
+        console.error('🚨 ERROR FATAL: No se puede iniciar sin base de datos en producción.');
+        process.exit(1); 
+      }
+      
+      // En desarrollo, continuar sin BD
       console.log('⚠️  Continuando sin base de datos para desarrollo...');
       dbConnected = false;
+      startServer();
     } else {
       console.log('✅ 4. Conexión a la base de datos exitosa.');
       dbConnected = true;
+      startServer();
     }
   });
 } else {
   console.log('⚠️  Sin configuración de base de datos - modo desarrollo.');
   dbConnected = false;
+  startServer();
 }
+
+// Función para iniciar el servidor
+function startServer() {
 
 // ===== RUTAS DEL API =====
 
@@ -159,22 +194,23 @@ app.post('/newsletter/subscribe', (req, res) => {
   });
 });
 
-// INICIAR SERVIDOR
-app.listen(PORT, () => {
-  console.log(`🚀 4. Servidor iniciado en puerto ${PORT}`);
-  console.log(`📱 Frontend disponible en: http://localhost:5173`);
-  console.log(`🔗 API disponible en: http://localhost:${PORT}`);
-  console.log(`🗄️  Base de datos: ${dbConnected ? 'Conectada' : 'Desconectada (modo desarrollo)'}`);
-  console.log('');
-  console.log('📋 Rutas disponibles:');
-  console.log('   GET  /api/test           - Verificar API');
-  console.log('   POST /login             - Iniciar sesión');  
-  console.log('   POST /newsletter/subscribe - Suscribirse');
-  console.log('');
-  console.log('🔧 Credenciales de prueba (sin BD):');
-  console.log('   admin@test.com / admin123');
-  console.log('   user@test.com / user123');
-});
+// INICIAR SERVIDOR DENTRO DE LA FUNCIÓN
+  app.listen(PORT, () => {
+    console.log(`🚀 5. Servidor iniciado en puerto ${PORT}`);
+    console.log(`📱 Frontend disponible en: http://localhost:5173`);
+    console.log(`🔗 API disponible en: http://localhost:${PORT}`);
+    console.log(`🗄️  Base de datos: ${dbConnected ? 'Conectada' : 'Desconectada (modo desarrollo)'}`);
+    console.log('');
+    console.log('📋 Rutas disponibles:');
+    console.log('   GET  /api/test           - Verificar API');
+    console.log('   POST /login             - Iniciar sesión');  
+    console.log('   POST /newsletter/subscribe - Suscribirse');
+    console.log('');
+    console.log('🔧 Credenciales de prueba (sin BD):');
+    console.log('   admin@test.com / admin123');
+    console.log('   user@test.com / user123');
+  });
+}
 
 // MANEJO DE ERRORES
 process.on('uncaughtException', (err) => {
