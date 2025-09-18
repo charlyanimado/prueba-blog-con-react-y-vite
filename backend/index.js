@@ -98,7 +98,7 @@ console.log('⏳ 3. Configurando conexión a la base de datos...');
 const connectionString = process.env.DATABASE_URL;
 
 db = mysql.createConnection({
-  uri: "mysql://root:XrSBpmJFLHBNnacIKDAYizHjajaLIPvI@trolley.proxy.rlwy.net:45664/charly_srl",
+  uri: connectionString,
   ssl: {
     rejectUnauthorized: false
   }
@@ -113,7 +113,7 @@ db.connect((error) => {
   console.log('✅ 4. Conexión a la base de datos exitosa.');
 
   // Si la conexión es exitosa, iniciamos el servidor
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 5. Servidor iniciado y escuchando en el puerto ${PORT}`);
   });
 });
