@@ -23,6 +23,11 @@ db.connect(error => {
     return;
   }
   // Database connection successful
+  
+  // Iniciar el servidor
+  app.listen(PORT, () => {
+    // Servidor iniciado exitosamente
+  });
 });
 
 // 5. Crear la ruta POST para el login
@@ -368,9 +373,3 @@ app.get('/contact/stats', (req, res) => {
     });
   });
 });
-
-// Iniciar el servidor
-app.listen(PORT, () => {
-  // Server started successfully
-});
-// Production note: Console logs removed for security
