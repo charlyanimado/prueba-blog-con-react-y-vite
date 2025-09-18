@@ -9,13 +9,17 @@ function LoginForm({ onLoginSuccess }) {
     setMessage(''); // Limpiamos el mensaje previo
 
     try {
-      const response = await fetch('http://localhost:3001/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+        // Lee la URL del backend desde las variables de entorno
+        const apiUrl = import.meta.env.VITE_API_URL;
 
-      const data = await response.json();
+        // Usa esa variable para construir la URL completa de la petición
+        const response = await fetch(`${apiUrl}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        // Lee la respuesta del servidor
+  const data = await response.json();
 
       if (response.ok) {
         setMessage('¡Login exitoso! Bienvenido.');
