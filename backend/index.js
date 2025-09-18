@@ -1,143 +1,51 @@
-// ===== BACKEND BLOG CON REACT Y VITE =====
+// ===== BACKEND BLOG - VERSIÓN FINAL PARA RAILWAY =====
+
+// 1. Importaciones
 const express = require('express'); 
 const mysql = require('mysql2'); 
 const cors = require('cors');
-require('dotenv').config();
 
 console.log('✅ 1. Script iniciado y dependencias cargadas.');
 
-// Crear la aplicación Express
+// 2. Crear la aplicación Express
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+// 3. Middleware
 app.use(cors());
 app.use(express.json());
-
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
+// 4. Declarar la variable de la base de datos
+// La declaramos aquí para que esté disponible para todas las rutas.
+let db;
+
 // =================================================================
-// 4. CONFIGURACIÓN Y CONEXIÓN A LA BASE DE DATOS
+// 5. DEFINICIÓN DE TODAS LAS RUTAS DE LA API
 // =================================================================
-const connectionString = process.env.DATABASE_URL;
-let db = null;
-let dbConnected = false;
-
-if (connectionString) {
-  // --- Configuración para Producción (Railway/Vercel/Heroku) ---
-  console.log('✅ 3. Usando DATABASE_URL para conexión de producción...');
-  try {
-    db = mysql.createConnection({
-      uri: connectionString, // Usamos la URL completa que nos da la plataforma
-      ssl: {
-        // Requerido para conexiones seguras en la nube
-        rejectUnauthorized: false
-      }
-    });
-  } catch (error) {
-    console.error('❌ Error configurando base de datos de producción:', error);
-    db = null;
-  }
-} else {
-  // --- Configuración para Desarrollo Local ---
-  console.log('⚠️ 3. Usando configuración local para desarrollo...');
-  try {
-    db = mysql.createConnection({
-      host: process.env.DB_HOST || 'localhost',
-      user: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_NAME || 'charly_srl'
-    });
-  } catch (error) {
-    console.error('❌ Error configurando base de datos local:', error);
-    db = null;
-  }
-}
-
-// Conectar a la base de datos y luego iniciar el servidor
-if (db) {
-  db.connect((error) => {
-    if (error) {
-      console.error('❌ ERROR AL CONECTAR A LA BASE DE DATOS:', error.message);
-      
-      // En producción, detener la aplicación si no hay BD
-      if (process.env.NODE_ENV === 'production') {
-        console.error('🚨 ERROR FATAL: No se puede iniciar sin base de datos en producción.');
-        process.exit(1); 
-      }
-      
-      // En desarrollo, continuar sin BD
-      console.log('⚠️  Continuando sin base de datos para desarrollo...');
-      dbConnected = false;
-      startServer();
-    } else {
-      console.log('✅ 4. Conexión a la base de datos exitosa.');
-      dbConnected = true;
-      startServer();
-    }
-  });
-} else {
-  console.log('⚠️  Sin configuración de base de datos - modo desarrollo.');
-  dbConnected = false;
-  startServer();
-}
-
-// Función para iniciar el servidor
-function startServer() {
-
-// ===== RUTAS DEL API =====
+// Las rutas deben definirse aquí, antes de que el servidor se inicie.
 
 // Ruta de prueba
 app.get('/api/test', (req, res) => {
-  res.json({ 
-    message: '🚀 API funcionando correctamente', 
-    timestamp: new Date().toISOString(),
-    dbStatus: dbConnected ? 'conectada' : 'desconectada'
-  });
+  res.json({ message: '🚀 API funcionando' });
 });
 
 // RUTA PARA LOGIN
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email y contraseña son requeridos' });
-  }
-
-  // Si no hay base de datos, usar datos simulados
-  if (!dbConnected) {
-    console.log('🔄 Simulando login sin base de datos');
-    if (email === 'admin@test.com' && password === 'admin123') {
-      return res.json({ 
-        message: 'Login exitoso (simulado)', 
-        user: { id: 1, nombre: 'Admin Test', email: email, rol: 'admin' } 
-      });
-    } else if (email === 'user@test.com' && password === 'user123') {
-      return res.json({ 
-        message: 'Login exitoso (simulado)', 
-        user: { id: 2, nombre: 'Usuario Test', email: email, rol: 'usuario' } 
-      });
-    }
-    return res.status(401).json({ message: 'Email o contraseña incorrectos (simulado)' });
-  }
-
-  // Consulta a la base de datos (cuando esté disponible)
   const sql = "SELECT u.id, u.nombre, u.email, u.password, r.nombre as rol FROM usuarios u JOIN roles r ON u.rol_id = r.id WHERE u.email = ?";
   db.query(sql, [email], (error, results) => {
     if (error) {
-      console.error('Error en la consulta:', error);
+      console.error('Error en la consulta de login:', error);
       return res.status(500).json({ message: 'Error en el servidor' });
     }
-
     if (results.length === 0) {
       return res.status(401).json({ message: 'Email o contraseña incorrectos' });
     }
-
     const user = results[0];
     if (password !== user.password) {
       return res.status(401).json({ message: 'Email o contraseña incorrectos' });
     }
-
     res.json({ 
       message: 'Login exitoso', 
       user: { id: user.id, nombre: user.nombre, email: user.email, rol: user.rol } 
@@ -145,78 +53,67 @@ app.post('/login', (req, res) => {
   });
 });
 
-// RUTA PARA NEWSLETTER
+// --- RUTA PARA NEWSLETTER ---
 app.post('/newsletter/subscribe', (req, res) => {
   const { email } = req.body;
-
   if (!email) {
     return res.status(400).json({ message: 'Email es requerido' });
   }
-
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Formato de email inválido' });
   }
-
-  // Si no hay base de datos, simular
-  if (!dbConnected) {
-    console.log('🔄 Simulando suscripción al newsletter sin base de datos');
-    return res.status(201).json({ 
-      message: '¡Suscripción exitosa! (simulado) Gracias por unirte a nuestro newsletter.',
-      subscriptionId: Math.floor(Math.random() * 1000)
-    });
-  }
-
-  // Código para base de datos (cuando esté disponible)
   const checkSql = "SELECT email FROM newsletter_subscriptions WHERE email = ?";
   db.query(checkSql, [email], (checkError, checkResults) => {
     if (checkError) {
       console.error('Error al verificar suscripción:', checkError);
       return res.status(500).json({ message: 'Error interno del servidor' });
     }
-
     if (checkResults.length > 0) {
-      return res.status(409).json({ message: 'Este email ya está suscrito al newsletter' });
+      return res.status(409).json({ message: 'Este email ya está suscrito' });
     }
-
-    const insertSql = "INSERT INTO newsletter_subscriptions (email, fecha_suscripcion, activo) VALUES (?, NOW(), 1)";
+    const insertSql = "INSERT INTO newsletter_subscriptions (email) VALUES (?)";
     db.query(insertSql, [email], (insertError, insertResult) => {
       if (insertError) {
         console.error('Error al suscribir al newsletter:', insertError);
         return res.status(500).json({ message: 'Error al procesar la suscripción' });
       }
-
       res.status(201).json({ 
-        message: '¡Suscripción exitosa! Gracias por unirte a nuestro newsletter.',
+        message: '¡Suscripción exitosa!',
         subscriptionId: insertResult.insertId 
       });
     });
   });
 });
 
-// INICIAR SERVIDOR DENTRO DE LA FUNCIÓN
-  app.listen(PORT, () => {
-    console.log(`🚀 5. Servidor iniciado en puerto ${PORT}`);
-    console.log(`📱 Frontend disponible en: http://localhost:5173`);
-    console.log(`🔗 API disponible en: http://localhost:${PORT}`);
-    console.log(`🗄️  Base de datos: ${dbConnected ? 'Conectada' : 'Desconectada (modo desarrollo)'}`);
-    console.log('');
-    console.log('📋 Rutas disponibles:');
-    console.log('   GET  /api/test           - Verificar API');
-    console.log('   POST /login             - Iniciar sesión');  
-    console.log('   POST /newsletter/subscribe - Suscribirse');
-    console.log('');
-    console.log('🔧 Credenciales de prueba (sin BD):');
-    console.log('   admin@test.com / admin123');
-    console.log('   user@test.com / user123');
-  });
-}
 
-// MANEJO DE ERRORES
-process.on('uncaughtException', (err) => {
-  console.error('❌ Error no capturado:', err);
+// ... AQUÍ PUEDES PEGAR TUS OTRAS RUTAS (.../usuarios, .../contact, etc.) ...
+
+
+// =================================================================
+// 6. CONECTAR A LA BASE DE DATOS E INICIAR EL SERVIDOR (AL FINAL)
+// =================================================================
+
+console.log('⏳ 3. Configurando conexión a la base de datos...');
+const connectionString = process.env.DATABASE_URL;
+
+db = mysql.createConnection({
+  uri: connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-process.on('unhandledRejection', (err) => {
-  console.error('❌ Promesa rechazada no manejada:', err);
+db.connect((error) => {
+  if (error) {
+    console.error('❌ ERROR FATAL AL CONECTAR A LA BASE DE DATOS:', error);
+    process.exit(1); // Detiene la aplicación si no se puede conectar
+  }
+
+  console.log('✅ 4. Conexión a la base de datos exitosa.');
+
+  // Si la conexión es exitosa, iniciamos el servidor
+  app.listen(PORT, () => {
+    console.log(`🚀 5. Servidor iniciado y escuchando en el puerto ${PORT}`);
+  });
 });
