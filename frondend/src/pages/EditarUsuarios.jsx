@@ -11,7 +11,8 @@ function EditUserPage() {
 
   // Cargar datos del usuario al montar el componente
   useEffect(() => {
-    fetch(`http://localhost:3001/usuarios/${id}`)
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    fetch(`${apiUrl}/usuarios/${id}`)
       .then(res => {
         if (!res.ok) {
           throw new Error('Error al cargar los datos del usuario');
@@ -33,7 +34,8 @@ function EditUserPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3001/usuarios/${id}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/usuarios/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email }),

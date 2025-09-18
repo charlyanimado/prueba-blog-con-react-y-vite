@@ -10,7 +10,8 @@ function AdminUsuarios() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchUsers = () => {
-    fetch('http://localhost:3001/usuarios')
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    fetch(`${apiUrl}/usuarios`)
       .then(res => res.json())
       .then(data => {
         setUsers(data);
@@ -89,7 +90,8 @@ function AdminUsuarios() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/usuarios/${userId}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/usuarios/${userId}`, {
         method: 'DELETE',
       });
       const data = await response.json();

@@ -37,7 +37,7 @@ app.get('/api/test', (req, res) => {
 // RUTA PARA LOGIN
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-  const sql = "SELECT u.id, u.nombre, u.email, u.password, r.nombre as rol FROM usuarios u JOIN roles r ON u.rol_id = r.id WHERE u.email = ?";
+  const sql = "SELECT u.id, u.nombre, u.email, u.password, r.nombre as rol FROM usuarios u JOIN roles r ON u.rol_id = r.id WHERE u.email = $1";
   db.query(sql, [email], (error, results) => {
     if (error) {
       console.error('Error en la consulta de login:', error);
@@ -67,7 +67,7 @@ app.post('/newsletter/subscribe', (req, res) => {
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Formato de email inválido' });
   }
-  const checkSql = "SELECT email FROM newsletter_subscriptions WHERE email = ?";
+  const checkSql = "SELECT email FROM newsletter_subscriptions WHERE email = $1";
   db.query(checkSql, [email], (checkError, checkResults) => {
     if (checkError) {
       console.error('Error al verificar suscripción:', checkError);
@@ -76,7 +76,7 @@ app.post('/newsletter/subscribe', (req, res) => {
     if (checkResults.length > 0) {
       return res.status(409).json({ message: 'Este email ya está suscrito' });
     }
-    const insertSql = "INSERT INTO newsletter_subscriptions (email) VALUES (?)";
+    const insertSql = "INSERT INTO newsletter_subscriptions (email) VALUES ($1)";
     db.query(insertSql, [email], (insertError, insertResult) => {
       if (insertError) {
         console.error('Error al suscribir al newsletter:', insertError);

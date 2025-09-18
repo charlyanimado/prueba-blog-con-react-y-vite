@@ -28,7 +28,8 @@ function ProfilePage({ user, onUserUpdate }) {
     setMessage('');
 
     try {
-      const response = await fetch(`http://localhost:3001/usuarios/${user.id}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/usuarios/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email }),
@@ -101,7 +102,8 @@ function ProfilePage({ user, onUserUpdate }) {
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/usuarios/${user.id}`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+      const response = await fetch(`${apiUrl}/usuarios/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
