@@ -3,6 +3,8 @@ const express = require('express');
 const mysql = require('mysql2'); 
 const cors = require('cors');
 
+console.log('✅ 1. Script iniciado y dependencias cargadas.');
+
 // 2. Crear la aplicación Express
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,26 +14,26 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+console.log('✅ 2. Aplicación Express y middleware configurados.');
+
 // 4. Configuración de la conexión a MySQL
 // en un entorno de producción, no deberias de exponer tus credenciales
 const connectionString = process.env.DATABASE_URL;
-const db = mysql.createConnection({
-  uri: 'mysql://root:XrSBpmJFLHBNnacIKDAYizHjajaLIPvI@trolley.proxy.rlwy.net:45664/charly_srl',
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const db = mysql.createConnection(connectionString);
 //para probar si mi base de datos se cayo o no 
 db.connect(error => {
   if (error) {
     console.error('❌ ERROR AL CONECTAR A LA BASE DE DATOS:', error);
     return;
   }
+
+  console.log('✅ 3. DATABASE_URL leída correctamente.');
   // Database connection successful
   
   // Iniciar el servidor
   app.listen(PORT, () => {
     // Servidor iniciado exitosamente
+    console.log(`✅ 4. Servidor escuchando en el puerto ${PORT}.`);
   });
 });
 
