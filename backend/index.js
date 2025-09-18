@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 // 3. Middleware
 const corsOptions = {
   // ¡IMPORTANTE! Usa la URL exacta de tu frontend en Vercel.
-  origin: 'https://prueba-blog-con-react-y-vite-bbb2b79a.vercel.app' 
+  origin: 'https://prueba-blog-con-react-y-vite.vercel.app' 
 };
 app.use(cors(corsOptions));
 app.use(express.json());
