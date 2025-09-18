@@ -16,6 +16,7 @@ app.use(express.json());
 
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
+let db;
 
 
 
@@ -361,6 +362,12 @@ app.get('/contact/stats', (req, res) => {
       unread_messages: results[0].unread_messages
     });
   });
+});
+
+// Asignamos la conexión a la variable db que declaramos arriba
+db = mysql.createConnection({
+  uri: connectionString,
+  // ...
 });
 
 // Intentamos conectar a la base de datos
