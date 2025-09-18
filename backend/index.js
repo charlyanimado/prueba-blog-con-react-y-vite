@@ -98,7 +98,7 @@ console.log('⏳ 3. Configurando conexión a la base de datos...');
 const connectionString = process.env.DATABASE_URL;
 
 db = mysql.createConnection({
-  uri: connectionString,
+  uri: "mysql://root:XrSBpmJFLHBNnacIKDAYizHjajaLIPvI@trolley.proxy.rlwy.net:45664/charly_srl",
   ssl: {
     rejectUnauthorized: false
   }
