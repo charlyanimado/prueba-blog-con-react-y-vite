@@ -5,7 +5,7 @@ const cors = require('cors');
 
 // 2. Crear la aplicación Express
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // 3. Middleware para entender JSON
 // Esto le enseña a Express a leer los datos JSON que enviará React
@@ -14,12 +14,8 @@ app.use(express.json());
 
 // 4. Configuración de la conexión a MySQL
 // en un entorno de producción, no deberias de exponer tus credenciales
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '18970SOLpisco?',
-  database: 'charly_SRL'
-});
+const connectionString = process.env.DATABASE_URL;
+const db = mysql.createConnection(connectionString);
 //para probar si mi base de datos se cayo o no 
 db.connect(error => {
   if (error) {
