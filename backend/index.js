@@ -16,66 +16,8 @@ app.use(express.json());
 
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
-// 4. Configuración de la conexión a MySQL
-// en un entorno de producción, no deberias de exponer tus credenciales
-const connectionString = process.env.DATABASE_URL;
 
-let db;
-if (connectionString && connectionString.trim() !== '') {
-  // Configuración para producción (Railway)
-  console.log('🔗 Usando DATABASE_URL para conexión de producción...');
-  db = mysql.createConnection(connectionString);
-} else {
-  // Configuración para desarrollo local
-  console.log('🔗 Usando configuración local para desarrollo...');
-  db = mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'blog_db',
-    charset: 'utf8mb4'
-  });
-}
 
-//para probar si mi base de datos se cayo o no 
-db.connect(error => {
-  if (error) {
-    console.error('❌ ERROR AL CONECTAR A LA BASE DE DATOS:', error);
-    if (connectionString && connectionString.trim() !== '') {
-      console.error('❌ Error en DATABASE_URL de producción');
-    } else {
-      console.error('❌ Error en base de datos local - Verifica que MySQL esté corriendo');
-      console.log('💡 Para desarrollo local, asegúrate de tener MySQL corriendo y la base de datos "blog_db" creada');
-      console.log('⚠️  CONTINUANDO SIN BASE DE DATOS PARA TESTING...');
-    }
-    // En lugar de return, continuamos sin base de datos para testing
-  } else {
-    if (connectionString && connectionString.trim() !== '') {
-      console.log('✅ 3. Conectado a base de datos de producción (Railway)');
-    } else {
-      console.log('✅ 3. Conectado a base de datos local de desarrollo');
-    }
-  }
-});
-
-// --- RUTA DE HEALTH CHECK PARA RAILWAY ---
-app.get('/', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Servidor funcionando correctamente',
-    timestamp: new Date().toISOString(),
-    port: PORT
-  });
-});
-
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'healthy',
-    database: 'connected',
-    uptime: process.uptime(),
-    memory: process.memoryUsage()
-  });
-});
 
 // 5. Crear la ruta POST para el login
 app.post('/login', (req, res) => {
@@ -421,12 +363,21 @@ app.get('/contact/stats', (req, res) => {
   });
 });
 
-// --- INICIAR EL SERVIDOR ---
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ 4. Servidor corriendo en puerto ${PORT}`);
-  console.log(`🌐 Servidor accesible en: http://0.0.0.0:${PORT}`);
-  console.log('🚀 ¡Aplicación lista para recibir peticiones!');
-  console.log(`📡 Entorno: ${process.env.NODE_ENV || 'development'}`);
+// Intentamos conectar a la base de datos
+db.connect((error) => {
+  if (error) {
+    // Si la conexión falla, la aplicación se detendrá y mostrará un error claro.
+    console.error('❌ ERROR FATAL AL CONECTAR A LA BASE DE DATOS:', error);
+    process.exit(1); // Detiene la aplicación si no se puede conectar
+  }
+
+  console.log('✅ 4. Conexión a la base de datos exitosa.');
+
+  // --- INICIAR EL SERVIDOR ---
+  // SOLO SI LA CONEXIÓN ES EXITOSA, PROCEDEMOS A INICIAR EL SERVIDOR.
+  app.listen(PORT, () => {
+    console.log(`🚀 5. Servidor iniciado y escuchando en el puerto ${PORT}`);
+  });
 });
 
 // --- MANEJO DE ERRORES NO CAPTURADOS ---
