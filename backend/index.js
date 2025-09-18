@@ -101,7 +101,6 @@ app.post('/newsletter/subscribe', (req, res) => {
 console.log('⏳ 3. Configurando conexión a la base de datos...');
 const connectionString = process.env.DATABASE_URL;
 
-const { Client } = require('pg'); // Cambiamos la importación
 // ...
 db = new Client({ // Cambiamos a "new Client"
     connectionString: connectionString,
