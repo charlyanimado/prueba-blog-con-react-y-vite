@@ -12,7 +12,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // 3. Middleware
-app.use(cors());
+const corsOptions = {
+  origin: 'https://vercel.com/carlos-projects-bbb2b79a/prueba-blog-con-react-y-vite/31CFdLMdYMt71D987ZvBxrYnfA4t', // Permitir todas las fuentes (ajusta esto según tus necesidades de seguridad)
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 console.log('✅ 2. Aplicación Express y middleware configurados.');
 
